@@ -6,6 +6,7 @@ import { fetchSpellsAPI } from '../../api';
 import { toast } from 'react-toastify';
 import {
   getFavFromLocalStorage,
+  removeLocalStorageItem,
   saveFavToLocalStorage,
 } from '../../utils/localStorage';
 
@@ -18,24 +19,38 @@ export default function SpellsContextProvider({
 }) {
   const [spellList, setSpellList] = useState<TypeSpell[]>([]);
   const [favSpells, setFavSpells] = useState<TypeSpell[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | unknown>();
 
   const readLocalFav = () => {
-    const favSpellsFromLocal = getFavFromLocalStorage();
-    if (favSpellsFromLocal) {
-      setFavSpells(favSpellsFromLocal);
+    setLoading(true);
+    try {
+      const favSpellsFromLocal = getFavFromLocalStorage();
+      if (favSpellsFromLocal) {
+        setFavSpells(favSpellsFromLocal);
+      }
+    } catch (error) {
+      setError(error);
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchSpellsList = async () => {
     try {
+      setLoading(true);
       const data: TypeSpellList = await fetchSpellsAPI();
       setSpellList(data?.results);
     } catch (error) {
+      setError(error);
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
         toast.error('Something went wrong!');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,6 +64,8 @@ export default function SpellsContextProvider({
   useEffect(() => {
     if (favSpells?.length > 0) {
       saveFavToLocalStorage(favSpells);
+    } else {
+      removeLocalStorageItem();
     }
   }, [favSpells, setFavSpells]);
 
@@ -71,6 +88,8 @@ export default function SpellsContextProvider({
         spellList,
         addToSpellList,
         removeFromFavSpells,
+        loading,
+        error,
       }}
     >
       {children}
