@@ -1,15 +1,26 @@
-import { createBrowserRouter } from "react-router-dom";
-import App from "../App";
-import NotFound from "../pages/NotFound";
+import { createBrowserRouter } from 'react-router-dom';
+import App from '../App';
+import NotFound from '../pages/NotFound';
+import SpellDetails from '../pages/SpellDetails';
+import HomePage from '../pages/HomePage';
 
 const routes = createBrowserRouter([
   {
-    path: "/",
     element: <App />,
-  },
-  {
-    path: "*",
-    element: <NotFound />,
+    children: [
+      {
+        path: '/',
+        element: <HomePage />,
+      },
+      {
+        path: '/spell-details/:spell',
+        element: <SpellDetails />,
+      },
+      {
+        path: '*',
+        element: <NotFound />,
+      },
+    ],
   },
 ]);
 
