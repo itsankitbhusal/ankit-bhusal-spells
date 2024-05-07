@@ -1,3 +1,2 @@
-export default {
-  spells: 'spells',
-};
+export const SPELLS = 'spells';
+export const LOCAL_STORAGE_NAME = 'favSpells';
