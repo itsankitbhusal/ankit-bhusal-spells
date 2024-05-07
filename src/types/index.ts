@@ -16,6 +16,8 @@ export type TypeSpellContext = {
   spellList: TypeSpell[];
   addToSpellList: (spells: TypeSpell[]) => void;
   removeFromFavSpells: (index: string) => void;
+  loading: boolean;
+  error: unknown;
 };
 
 export type TypeRepeated = {
