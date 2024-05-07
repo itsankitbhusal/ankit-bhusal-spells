@@ -6,7 +6,6 @@ import { fetchSpellsAPI } from '../../api';
 import { toast } from 'react-toastify';
 import {
   getFavFromLocalStorage,
-  removeLocalStorageItem,
   saveFavToLocalStorage,
 } from '../../utils/localStorage';
 
